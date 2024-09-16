@@ -128,12 +128,19 @@ define('forum/register', [
                 api.head(`/users/bySlug/${username}`, {}),
                 api.head(`/groups/${username}`, {}),
             ]).then((results) => {
+                // if (results.every(obj => obj.status === 'rejected')) {
+                //     showSuccess(username_notify, successIcon);
+                // } else {
+                //     showError(username_notify, '[[error:username-taken]]');
+                // }
                 if (results.every(obj => obj.status === 'rejected')) {
                     showSuccess(username_notify, successIcon);
                 } else {
-                    showError(username_notify, '[[error:username-taken]]');
-                }
-
+                    // Username is taken so we suggest a new one
+                    const suggestedUsername = username + '123'; 
+                    const message = 'The username "' + username + '" is taken. Try "' + suggestedUsername + '" instead.';
+                    showError(username_notify, message);
+                }                
                 callback();
             });
         }
